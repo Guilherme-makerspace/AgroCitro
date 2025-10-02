@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Plantio</title>
+  <link rel="stylesheet" href="css/style2.css">
+  <script src="https://kit.fontawesome.com/f92cff795a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <span class="tag"> <strong>Web</strong></span>
+    <h1>Situação <span class="agro">Agro</span><span class="citro">Citro</span><i class="fa-solid fa-leaf"></i></h1>
+  </header>
+  <div class="Menu">
+    <a href="colheita.html">
+      <button>Colheita</button>
+    </a>
+    <a href="plantio.html">
+      <button>Plantio</button>
+    </a>
+    <a href="irrigacao.html">
+      <button>Irrigação</button>
+    </a>
+  </div>
+  <div class="container">
+
+    <h1>Registrar <span class="agro">Plantio</span></h1>
+
+    <form id="formPlantio">
+      <label>Variedade</label>
+      <input type="text" id="variedade" required>
+
+      <label>Quantidade</label>
+      <input type="number" id="quantidade" required>
+
+      <label>Data do Plantio</label>
+      <input type="date" id="data" required>
+
+      <label>Localização</label>
+      <input type="text" id="localizacao" required>
+
+      <button type="submit">Registrar</button>
+    </form>
+
+    <h2>Lista de Plantios</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Variedade</th>
+          <th>Quantidade</th>
+          <th>Data</th>
+          <th>Localização</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaPlantio"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const formPlantio = document.getElementById('formPlantio');
+    const tabelaPlantio = document.getElementById('tabelaPlantio');
+
+    formPlantio.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        Variedade: document.getElementById('variedade').value,
+        Quantidade_Plantada: document.getElementById('quantidade').value,
+        Data_Plantio: document.getElementById('data').value,
+        Localizacao: document.getElementById('localizacao').value
+      };
+      const resposta = await fetch('http://10.111.9.90:3000/registrarPlantio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await resposta.json();
+      alert(result.msg);
+      carregarPlantios();
+    });
+
+    async function carregarPlantios() {
+      const resposta = await fetch('http://10.111.9.90:3000/plantios');
+      const plantios = await resposta.json();
+      tabelaPlantio.innerHTML = plantios.map(p => `
+        <tr>
+          <td>${p.ID_Plantio}</td>
+          <td>${p.Variedade}</td>
+          <td>${p.Quantidade_Plantada}</td>
+          <td>${p.Data_Plantio}</td>
+          <td>${p.Localizacao}</td>
+        </tr>
+      `).join('');
+    }
+
+    carregarPlantios();
+  </script>
+</body>
+</html>

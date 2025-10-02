@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/f92cff795a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="cabecalho">
+        <h1><span class="agro">Agro</span><span class="citro">Citro</span> <i class="fa fa-leaf"></i></h1>
+    </header>
+    <div class="container">
+        <div class="registro">
+            <h2>Login</h2>
+            <form id="form-login">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                
+                <button type="submit">Entrar</button>
+            </form>
+            <a href="cadastrar.html" class="tag">Não possui uma conta? Cadastre-se</a>
+        </div>
+    </div>
+    <script>
+        const login = document.getElementById('form-login');
+        if (login) login.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim(),
+                senha = document.getElementById('senha').value;
+
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, senha })
+            });
+
+            const data = await res.json();
+            if (!res.ok) return alert(data.error || 'Erro no login');
+            alert('Login realizado com sucesso!');
+            window.location.href = 'plantio.html'; // Redirecione para o dashboard
+        });
+    </script>
+</body>
+</html>

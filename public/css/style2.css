@@ -1,0 +1,186 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    color: #333;
+}
+
+/* Cabeçalho */
+.cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 30px 50px;
+}
+
+.cabecalho h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.agro {
+    color: #FFC000; /* Amarelo */
+}
+
+.citro {
+    color: #28A745; /* Verde */
+}
+
+.fa-leaf {
+    color: #28A745;
+    margin-left: 8px;
+    font-size: 1.2em;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 40px;
+    gap: 40px;
+}
+
+/* Registro */
+.registro {
+    flex: 1;
+    max-width: 350px;
+}
+
+.registro h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.95em;
+}
+
+button {
+    margin-top: 10px;
+    background-color: #FFC000;
+    color: #000;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: fit-cont;
+}
+
+button:hover {
+    background-color: #e0a800;
+    padding: 20px;
+}
+
+.lista {
+    flex: 2;
+}
+
+.lista h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+th, td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    font-weight: bold;
+    color: #444;
+}
+.clima-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .clima-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .clima-container p {
+    font-size: 1em;
+    margin: 5px 0;
+  }
+
+.previsoes-futuras {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.previsao-dia {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  text-align: center;
+  width: 150px;
+}
+
+.previsao-dia h4 {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.previsao-dia img {
+  width: 50px;
+  height: 50px;
+}
+
+.tag{
+    background-color: #FFC000;
+    border: #FFC000 5px solid;
+    border-radius: 8px;
+}
+
+a{
+    justify-content: space-around;
+    padding: 1rem;
+}
+
+.Menu{   
+    position: absolute;
+    top: 0%;
+    padding: 30px;
+    right: 10%;
+}

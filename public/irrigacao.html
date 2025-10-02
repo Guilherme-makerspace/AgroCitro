@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Irrigação</title>
+  <link rel="stylesheet" href="css/style2.css">
+  <script src="https://kit.fontawesome.com/f92cff795a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <span class="tag"> <strong>Web</strong></span>
+    <h1>Situação <span class="agro">Agro</span><span class="citro">Citro</span><i class="fa-solid fa-leaf"></i></h1>
+  </header>
+  <div class="Menu">
+    <a href="colheita.html">
+      <button>Colheita</button>
+    </a>
+    <a href="plantio.html">
+      <button>Plantio</button>
+    </a>
+    <a href="irrigacao.html">
+      <button>Irrigação</button>
+    </a>
+  </div>
+  <div class="container">
+    <h1>Agendar <span class="agro">Irrigação</span></h1>
+
+    <form id="formIrrigacao">
+      <label>Horário Inicial</label>
+      <input type="time" id="inicio" required>
+
+      <label>Horário Final</label>
+      <input type="time" id="fim" required>
+
+      <button type="submit">Agendar</button>
+    </form>
+
+    <h2>Agendamentos</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Horário Inicial</th>
+          <th>Horário Final</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaIrrigacao"></tbody>
+    </table>
+  </div>
+  
+  <div class="clima-container">
+    <h2>Previsão Climática - Presidente Prudente</h2>
+    <div id="previsaoClima">
+      <p>Carregando previsão do tempo...</p>
+    </div>
+  </div>
+
+  <script>
+    const formIrrigacao = document.getElementById('formIrrigacao');
+    const tabelaIrrigacao = document.getElementById('tabelaIrrigacao');
+
+    formIrrigacao.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        Horario_Inicial: document.getElementById('inicio').value,
+        Horario_Final: document.getElementById('fim').value
+      };
+      const resposta = await fetch('http://10.111.9.90:3000/agendarIrrigacao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await resposta.json();
+      alert(result.msg);
+      carregarIrrigacao();
+    });
+
+    async function carregarIrrigacao() {
+      const resposta = await fetch('http://10.111.9.90:3000/irrigacao');
+      const irrigacoes = await resposta.json();
+      tabelaIrrigacao.innerHTML = irrigacoes.map(i => `
+        <tr>
+          <td>${i.ID_Irrigacao}</td>
+          <td>${i.Horario_Inicial}</td>
+          <td>${i.Horario_Final}</td>
+        </tr>
+      `).join('');
+    }
+
+///////// TESTE DE API DE CLIMA /////////
+async function carregarPrevisaoClima() {
+  const apiKey = '9535a061ad23477f9cd182820253009'; // Substitua pela sua chave da WeatherAPI
+  const cidade = 'Presidente Prudente';
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cidade}&days=12&lang=pt`; // Alterado para 3 dias
+
+  try {
+    const resposta = await fetch(url);
+    const dados = await resposta.json();
+
+    // Clima atual
+    const climaAtualHTML = `
+      <h3>Clima Atual</h3>
+      <p><strong>Cidade:</strong> ${dados.location.name}</p>
+      <p><strong>Temperatura Atual:</strong> ${dados.current.temp_c}°C</p>
+      <p><strong>Condição:</strong> ${dados.current.condition.text}</p>
+      <p><strong>Umidade:</strong> ${dados.current.humidity}%</p>
+      <p><strong>Vento:</strong> ${dados.current.wind_kph} km/h</p>
+      <img src="https:${dados.current.condition.icon}" alt="Ícone do clima">
+    `;
+
+    // Previsão para os próximos dias
+    const previsoesFuturasHTML = dados.forecast.forecastday.map(dia => `
+      <div class="previsao-dia">
+        <h4>${new Date(dia.date).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</h4>
+        <p><strong>Máxima:</strong> ${dia.day.maxtemp_c}°C</p>
+        <p><strong>Mínima:</strong> ${dia.day.mintemp_c}°C</p>
+        <p><strong>Condição:</strong> ${dia.day.condition.text}</p>
+        <img src="https:${dia.day.condition.icon}" alt="Ícone do clima">
+      </div>
+    `).join('');
+
+    document.getElementById('previsaoClima').innerHTML = `
+      ${climaAtualHTML}
+      <h3>Previsão para os Próximos Dias</h3>
+      <div class="previsoes-futuras">
+        ${previsoesFuturasHTML}
+      </div>
+    `;
+  } catch (error) {
+    document.getElementById('previsaoClima').innerHTML = `<p>Erro ao carregar os dados climáticos.</p>`;
+    console.error('Erro ao buscar os dados da API:', error);
+  }
+}
+
+// Chamar a função ao carregar a página
+carregarPrevisaoClima();
+
+    carregarIrrigacao();
+  </script>
+</body>
+</html>
