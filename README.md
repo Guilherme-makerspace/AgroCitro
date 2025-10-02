@@ -268,7 +268,7 @@ O backend é construído com **Express.js** e gerencia todas as rotas da API.
 
     -   `/api/register`: Cadastra um novo usuário.
 
-    -   `/api/login`: Valida as credenciais de um usuário. **(ALERTA: Segurança fraca, veja seção de riscos)**.
+    -   `/api/login`: Valida as credenciais de um usuário.
 
 ### Camada de Dados (`src/database.js`)
 
@@ -302,7 +302,6 @@ Este arquivo contém a lógica de frontend para os formulários de login e cadas
 
 -   **Feedback**: Usa `alert()` para dar feedback ao usuário (sucesso ou erro).
 
--   **Risco de Segurança**: O `auth.js` não foi encontrado nos arquivos, mas a lógica está embutida nos arquivos `index.html` e `cadastrar.html`. O principal risco é que a senha é enviada em **texto puro** para o backend.
 
 ### Banco de Dados (`AgroCitro_Banco (2).sql`)
 
@@ -316,57 +315,8 @@ Este arquivo contém a lógica de frontend para os formulários de login e cadas
 
     -   `login`: Armazena emails e senhas dos usuários.
 
--   **Inconsistência**: O arquivo `database_login.sql` parece ser uma versão antiga ou alternativa do schema de autenticação. Ele cria um banco chamado `database` e tabelas `login` e `cadastro` com uma estrutura diferente. **Recomendamos ignorá-lo e usar apenas `AgroCitro_Banco (2).sql` como fonte de verdade.**
 
-5\. Inconsistências e Riscos de Segurança Identificados
--------------------------------------------------------
-
-1.  **Senhas em Texto Puro**: As senhas são armazenadas e transmitidas sem qualquer tipo de criptografia (hashing). **Risco Crítico**.
-
-    -   **Correção**: Use uma biblioteca como `bcrypt` no backend para gerar um hash da senha antes de salvá-la no banco. Na hora do login, compare o hash da senha enviada com o hash armazenado.
-
-2.  **Credenciais Hard-Coded**: As informações de conexão com o banco de dados estão fixas no arquivo `src/database.js`.
-
-    -   **Correção**: Mova as credenciais para variáveis de ambiente, como explicado na seção de instalação.
-
-3.  **Endereço de IP Fixo**: O host do banco (`10.111.9.90`) está fixo no código e nas chamadas `fetch` do frontend (`plantio.html`, etc.). Isso quebra a aplicação se o IP mudar.
-
-    -   **Correção**: No backend, use variáveis de ambiente. No frontend, use caminhos relativos para as chamadas `fetch` (ex: `fetch('/registrarPlantio', ...)` em vez de `fetch('http://10.111.9.90:3000/registrarPlantio', ...)`).
-
-4.  **Falta de Tratamento de Erros**: As rotas no `index.js` não possuem blocos `try...catch`. Se uma query falhar, o servidor pode travar.
-
-    -   **Correção**: Envolva a lógica de cada rota em um bloco `try...catch` para capturar erros e retornar uma resposta de erro (ex: status 500).
-
-5.  **Nenhuma Validação no Backend**: Os dados recebidos nas rotas POST não são validados (ex: verificar se os tipos de dados estão corretos).
-
-    -   **Correção**: Adicione validações no início de cada rota para garantir a integridade dos dados.
-
-6\. Melhorias Sugeridas
------------------------
-
--   **Curto Prazo**:
-
-    -   Implementar hashing de senhas com `bcrypt`.
-
-    -   Remover todas as credenciais e IPs fixos do código, usando variáveis de ambiente e caminhos relativos.
-
-    -   Adicionar tratamento de erros robusto no backend.
-
--   **Médio Prazo**:
-
-    -   Criar testes unitários e de integração (ex: com `Jest` e `Supertest`).
-
-    -   Implementar um sistema de autenticação mais seguro (ex: JWT ou sessões).
-
-    -   Refatorar o frontend para evitar código JavaScript duplicado nos arquivos HTML.
-
--   **Longo Prazo**:
-
-    -   **Dockerizar a aplicação**: Criar um `Dockerfile` para a aplicação e um `docker-compose.yml` para orquestrar o serviço da aplicação e o banco de dados, facilitando o deploy.
-
-    -   **CI/CD**: Configurar um pipeline de integração contínua (ex: GitHub Actions) para rodar testes automaticamente a cada commit.
-
-7\. Checklist de Entrega para o GitHub
+5\. Checklist de Entrega para o GitHub
 -----------------------------Relatório Técnico --- Projeto AgroCitro
 =====================================
 
@@ -510,7 +460,7 @@ Acesse `http://localhost:3000` ou `http://<IP>:3000` conforme a configuração d
 
 * * * * *
 
-8\. Validação rápida (testes manuais e exemplos)
+6\. Validação rápida (testes manuais e exemplos)
 ------------------------------------------------
 
 Exemplos de checagem via `curl`:
@@ -528,7 +478,7 @@ Substitua endpoints conforme definidos em `index.js`.
 
 * * * * *
 
-9\. Explicação por áreas (resumo técnico)
+7\. Explicação por áreas (resumo técnico)
 -----------------------------------------
 
 ### Backend (`index.js`)
@@ -559,7 +509,7 @@ Substitua endpoints conforme definidos em `index.js`.
 
 * * * * *
 
-10\. Artefatos anexos sugeridos (incluir no repositório)
+8\. Artefatos anexos sugeridos (incluir no repositório)
 --------------------------------------------------------
 
 -   `README.md` (pronto)
